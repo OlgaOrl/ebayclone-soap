@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:tns="http://ebay.clone.soap/service"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             targetNamespace="http://ebay.clone.soap/service">
+    
+    <types>
+        <xsd:schema targetNamespace="http://ebay.clone.soap/types">
+            <!-- User types -->
+            <xsd:element name="User">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="id" type="xsd:long"/>
+                        <xsd:element name="username" type="xsd:string"/>
+                        <xsd:element name="email" type="xsd:string"/>
+                        <!-- Additional fields omitted -->
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            
+            <!-- Product types -->
+            <xsd:element name="Product">
+                <!-- Product schema definition -->
+            </xsd:element>
+            
+            <!-- Additional types omitted -->
+        </xsd:schema>
+    </types>
+    
+    <!-- User Service Messages -->
+    <message name="RegisterUserRequest">
+        <part name="parameters" element="tns:RegisterUserRequest"/>
+    </message>
+    <message name="RegisterUserResponse">
+        <part name="parameters" element="tns:RegisterUserResponse"/>
+    </message>
+    
+    <!-- Port Types -->
+    <portType name="UserServicePortType">
+        <operation name="registerUser">
+            <input message="tns:RegisterUserRequest"/>
+            <output message="tns:RegisterUserResponse"/>
+            <fault name="ServiceFault" message="tns:ServiceFault"/>
+        </operation>
+        <!-- Additional operations omitted -->
+    </portType>
+    
+    <!-- Bindings -->
+    <binding name="UserServiceBinding" type="tns:UserServicePortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="registerUser">
+            <soap:operation soapAction="http://ebay.clone.soap/service/registerUser"/>
+            <input><soap:body use="literal"/></input>
+            <output><soap:body use="literal"/></output>
+            <fault name="ServiceFault">
+                <soap:fault name="ServiceFault" use="literal"/>
+            </fault>
+        </operation>
+    </binding>
+    
+    <!-- Service -->
+    <service name="EbayCloneService">
+        <port name="UserServicePort" binding="tns:UserServiceBinding">
+            <soap:address location="http://localhost:8080/soap/user"/>
+        </port>
+    </service>
+</definitions>
