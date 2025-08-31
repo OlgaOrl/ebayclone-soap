@@ -1,3 +1,4 @@
+
 package com.ebayclone.soap;
 
 import com.ebayclone.soap.config.HandlerConfig;
@@ -13,28 +14,28 @@ public class SoapServer {
         // Create and start the User service
         JaxWsServerFactoryBean userFactory = new JaxWsServerFactoryBean();
         userFactory.setServiceClass(UserServiceImpl.class);
-        userFactory.setAddress("http://localhost:8080/soap/user");
+        userFactory.setAddress("http://0.0.0.0:8080/soap/user");
         userFactory.setHandlers(HandlerConfig.getHandlerChain());
         userFactory.create();
         
         // Create and start the Product service
         JaxWsServerFactoryBean productFactory = new JaxWsServerFactoryBean();
         productFactory.setServiceClass(ProductServiceImpl.class);
-        productFactory.setAddress("http://localhost:8080/soap/product");
+        productFactory.setAddress("http://0.0.0.0:8080/soap/product");
         productFactory.setHandlers(HandlerConfig.getHandlerChain());
         productFactory.create();
         
         // Create and start the Auction service
         JaxWsServerFactoryBean auctionFactory = new JaxWsServerFactoryBean();
         auctionFactory.setServiceClass(AuctionServiceImpl.class);
-        auctionFactory.setAddress("http://localhost:8080/soap/auction");
+        auctionFactory.setAddress("http://0.0.0.0:8080/soap/auction");
         auctionFactory.setHandlers(HandlerConfig.getHandlerChain());
         auctionFactory.create();
         
         // Create and start the Order service
         JaxWsServerFactoryBean orderFactory = new JaxWsServerFactoryBean();
         orderFactory.setServiceClass(OrderServiceImpl.class);
-        orderFactory.setAddress("http://localhost:8080/soap/order");
+        orderFactory.setAddress("http://0.0.0.0:8080/soap/order");
         orderFactory.setHandlers(HandlerConfig.getHandlerChain());
         orderFactory.create();
         
@@ -52,4 +53,5 @@ public class SoapServer {
         }
     }
 }
+
 
