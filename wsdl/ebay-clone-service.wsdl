@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:tns="http://ebay.clone.soap/service"
+             xmlns:types="http://ebay.clone.soap/types"
+             xmlns:faults="http://ebay.clone.soap/faults"
+             targetNamespace="http://ebay.clone.soap/service">
+
+  <types>
+    <xsd:schema>
+      <xsd:import namespace="http://ebay.clone.soap/types" schemaLocation="types.xsd"/>
+      <xsd:import namespace="http://ebay.clone.soap/faults" schemaLocation="faults.xsd"/>
+    </xsd:schema>
+  </types>
+
+  <!-- Messages: Auth header -->
+  <message name="AuthHeader">
+    <part name="AuthToken" type="xsd:string"/>
+  </message>
+
+  <!-- Users messages -->
+  <message name="CreateUserRequest"><part name="parameters" element="types:CreateUserRequest"/></message>
+  <message name="CreateUserResponse"><part name="parameters" element="types:CreateUserResponse"/></message>
+  <message name="GetUserRequest"><part name="parameters" element="types:GetUserRequest"/></message>
+  <message name="GetUserResponse"><part name="parameters" element="types:GetUserResponse"/></message>
+  <message name="ReplaceUserRequest"><part name="parameters" element="types:ReplaceUserRequest"/></message>
+  <message name="ReplaceUserResponse"><part name="parameters" element="types:ReplaceUserResponse"/></message>
+  <message name="UpdateUserRequest"><part name="parameters" element="types:UpdateUserRequest"/></message>
+  <message name="UpdateUserResponse"><part name="parameters" element="types:UpdateUserResponse"/></message>
+  <message name="DeleteUserRequest"><part name="parameters" element="types:DeleteUserRequest"/></message>
+  <message name="DeleteUserResponse"><part name="parameters" element="types:DeleteUserResponse"/></message>
+
+  <!-- Sessions messages -->
+  <message name="LoginRequest"><part name="parameters" element="types:LoginRequest"/></message>
+  <message name="LoginResponse"><part name="parameters" element="types:LoginResponse"/></message>
+  <message name="LogoutRequest"><part name="parameters" element="types:LogoutRequest"/></message>
+  <message name="LogoutResponse"><part name="parameters" element="types:LogoutResponse"/></message>
+
+  <!-- Listings messages -->
+  <message name="SearchListingsRequest"><part name="parameters" element="types:SearchListingsRequest"/></message>
+  <message name="SearchListingsResponse"><part name="parameters" element="types:SearchListingsResponse"/></message>
+  <message name="CreateListingRequest"><part name="parameters" element="types:CreateListingRequest"/></message>
+  <message name="CreateListingResponse"><part name="parameters" element="types:CreateListingResponse"/></message>
+  <message name="GetListingRequest"><part name="parameters" element="types:GetListingRequest"/></message>
+  <message name="GetListingResponse"><part name="parameters" element="types:GetListingResponse"/></message>
+  <message name="UpdateListingRequest"><part name="parameters" element="types:UpdateListingRequest"/></message>
+  <message name="UpdateListingResponse"><part name="parameters" element="types:UpdateListingResponse"/></message>
+  <message name="DeleteListingRequest"><part name="parameters" element="types:DeleteListingRequest"/></message>
+  <message name="DeleteListingResponse"><part name="parameters" element="types:DeleteListingResponse"/></message>
+
+  <!-- Orders messages -->
+  <message name="ListOrdersRequest"><part name="parameters" element="types:ListOrdersRequest"/></message>
+  <message name="ListOrdersResponse"><part name="parameters" element="types:ListOrdersResponse"/></message>
+  <message name="CreateOrderRequest"><part name="parameters" element="types:CreateOrderRequest"/></message>
+  <message name="CreateOrderResponse"><part name="parameters" element="types:CreateOrderResponse"/></message>
+  <message name="GetOrderRequest"><part name="parameters" element="types:GetOrderRequest"/></message>
+  <message name="GetOrderResponse"><part name="parameters" element="types:GetOrderResponse"/></message>
+  <message name="UpdateOrderRequest"><part name="parameters" element="types:UpdateOrderRequest"/></message>
+  <message name="UpdateOrderResponse"><part name="parameters" element="types:UpdateOrderResponse"/></message>
+  <message name="DeleteOrderRequest"><part name="parameters" element="types:DeleteOrderRequest"/></message>
+  <message name="DeleteOrderResponse"><part name="parameters" element="types:DeleteOrderResponse"/></message>
+  <message name="CancelOrderRequest"><part name="parameters" element="types:CancelOrderRequest"/></message>
+  <message name="CancelOrderResponse"><part name="parameters" element="types:CancelOrderResponse"/></message>
+  <message name="UpdateOrderStatusRequest"><part name="parameters" element="types:UpdateOrderStatusRequest"/></message>
+  <message name="UpdateOrderStatusResponse"><part name="parameters" element="types:UpdateOrderStatusResponse"/></message>
+
+  <!-- Fault messages -->
+  <message name="ValidationFault"><part name="detail" element="faults:ValidationFaultDetail"/></message>
+  <message name="UnauthorizedFault"><part name="detail" element="faults:UnauthorizedFaultDetail"/></message>
+  <message name="NotFoundFault"><part name="detail" element="faults:NotFoundFaultDetail"/></message>
+  <message name="ConflictFault"><part name="detail" element="faults:ConflictFaultDetail"/></message>
+  <message name="BusinessRuleFault"><part name="detail" element="faults:BusinessRuleFaultDetail"/></message>
+  <message name="ServiceFault"><part name="detail" element="faults:ServiceFaultDetail"/></message>
+
+  <!-- PortTypes -->
+  <portType name="UsersPortType">
+    <operation name="CreateUser">
+      <input message="tns:CreateUserRequest"/>
+      <output message="tns:CreateUserResponse"/>
+      <fault name="ValidationFault" message="tns:ValidationFault"/>
+      <fault name="ConflictFault" message="tns:ConflictFault"/>
+      <fault name="ServiceFault" message="tns:ServiceFault"/>
+    </operation>
+    <operation name="GetUser">
+      <input message="tns:GetUserRequest"/>
+      <output message="tns:GetUserResponse"/>
+      <fault name="NotFoundFault" message="tns:NotFoundFault"/>
+      <fault name="ServiceFault" message="tns:ServiceFault"/>
+    </operation>
+    <operation name="ReplaceUser">
+      <input message="tns:ReplaceUserRequest"/>
+      <output message="tns:ReplaceUserResponse"/>
+      <fault name="ValidationFault" message="tns:ValidationFault"/>
+      <fault name="UnauthorizedFault" message="tns:UnauthorizedFault"/>
+      <fault name="NotFoundFault" message="tns:NotFoundFault"/>
+      <fault name="ServiceFault" message="tns:ServiceFault"/>
+    </operation>
+    <operation name="UpdateUser">
+      <input message="tns:UpdateUserRequest"/>
+      <output message="tns:UpdateUserResponse"/>
+      <fault name="ValidationFault" message="tns:ValidationFault"/>
+      <fault name="UnauthorizedFault" message="tns:UnauthorizedFault"/>
+      <fault name="NotFoundFault" message="tns:NotFoundFault"/>
+      <fault name="ServiceFault" message="tns:ServiceFault"/>
+    </operation>
+    <operation name="DeleteUser">
+      <input message="tns:DeleteUserRequest"/>
+      <output message="tns:DeleteUserResponse"/>
+      <fault name="UnauthorizedFault" message="tns:UnauthorizedFault"/>
+      <fault name="NotFoundFault" message="tns:NotFoundFault"/>
+      <fault name="ServiceFault" message="tns:ServiceFault"/>
+    </operation>
+  </portType>
+
+  <portType name="SessionsPortType">
+    <operation name="Login">
+      <input message="tns:LoginRequest"/>
+      <output message="tns:LoginResponse"/>
+      <fault name="ValidationFault" message="tns:ValidationFault"/>
+      <fault name="ServiceFault" message="tns:ServiceFault"/>
+    </operation>
+    <operation name="Logout">
+      <input message="tns:LogoutRequest"/>
+      <output message="tns:LogoutResponse"/>
+      <fault name="UnauthorizedFault" message="tns:UnauthorizedFault"/>
+      <fault name="ServiceFault" message="tns:ServiceFault"/>
+    </operation>
+  </portType>
+
+  <portType name="ListingsPortType">
+    <operation name="SearchListings">
+      <input message="tns:SearchListingsRequest"/>
+      <output message="tns:SearchListingsResponse"/>
+      <fault name="ServiceFault" message="tns:ServiceFault"/>
+    </operation>
+    <operation name="CreateListing">
+      <input message="tns:CreateListingRequest"/>
+      <output message="tns:CreateListingResponse"/>
+      <fault name="ValidationFault" message="tns:ValidationFault"/>
+      <fault name="UnauthorizedFault" message="tns:UnauthorizedFault"/>
+      <fault name="ServiceFault" message="tns:ServiceFault"/>
+    </operation>
+    <operation name="GetListing">
+      <input message="tns:GetListingRequest"/>
+      <output message="tns:GetListingResponse"/>
+      <fault name="NotFoundFault" message="tns:NotFoundFault"/>
+      <fault name="ServiceFault" message="tns:ServiceFault"/>
+    </operation>
+    <operation name="UpdateListing">
+      <input message="tns:UpdateListingRequest"/>
+      <output message="tns:UpdateListingResponse"/>
+      <fault name="ValidationFault" message="tns:ValidationFault"/>
+      <fault name="NotFoundFault" message="tns:NotFoundFault"/>
+      <fault name="ServiceFault" message="tns:ServiceFault"/>
+    </operation>
+    <operation name="DeleteListing">
+      <input message="tns:DeleteListingRequest"/>
+      <output message="tns:DeleteListingResponse"/>
+      <fault name="NotFoundFault" message="tns:NotFoundFault"/>
+      <fault name="ServiceFault" message="tns:ServiceFault"/>
+    </operation>
+  </portType>
+
+  <portType name="OrdersPortType">
+    <operation name="ListOrders">
+      <input message="tns:ListOrdersRequest"/>
+      <output message="tns:ListOrdersResponse"/>
+      <fault name="UnauthorizedFault" message="tns:UnauthorizedFault"/>
+      <fault name="ServiceFault" message="tns:ServiceFault"/>
+    </operation>
+    <operation name="CreateOrder">
+      <input message="tns:CreateOrderRequest"/>
+      <output message="tns:CreateOrderResponse"/>
+      <fault name="ValidationFault" message="tns:ValidationFault"/>
+      <fault name="UnauthorizedFault" message="tns:UnauthorizedFault"/>
+      <fault name="ServiceFault" message="tns:ServiceFault"/>
+    </operation>
+    <operation name="GetOrder">
+      <input message="tns:GetOrderRequest"/>
+      <output message="tns:GetOrderResponse"/>
+      <fault name="UnauthorizedFault" message="tns:UnauthorizedFault"/>
+      <fault name="NotFoundFault" message="tns:NotFoundFault"/>
+      <fault name="ServiceFault" message="tns:ServiceFault"/>
+    </operation>
+    <operation name="UpdateOrder">
+      <input message="tns:UpdateOrderRequest"/>
+      <output message="tns:UpdateOrderResponse"/>
+      <fault name="ValidationFault" message="tns:ValidationFault"/>
+      <fault name="UnauthorizedFault" message="tns:UnauthorizedFault"/>
+      <fault name="NotFoundFault" message="tns:NotFoundFault"/>
+      <fault name="ServiceFault" message="tns:ServiceFault"/>
+    </operation>
+    <operation name="DeleteOrder">
+      <input message="tns:DeleteOrderRequest"/>
+      <output message="tns:DeleteOrderResponse"/>
+      <fault name="UnauthorizedFault" message="tns:UnauthorizedFault"/>
+      <fault name="NotFoundFault" message="tns:NotFoundFault"/>
+      <fault name="ServiceFault" message="tns:ServiceFault"/>
+    </operation>
+    <operation name="CancelOrder">
+      <input message="tns:CancelOrderRequest"/>
+      <output message="tns:CancelOrderResponse"/>
+      <fault name="UnauthorizedFault" message="tns:UnauthorizedFault"/>
+      <fault name="NotFoundFault" message="tns:NotFoundFault"/>
+      <fault name="ServiceFault" message="tns:ServiceFault"/>
+    </operation>
+    <operation name="UpdateOrderStatus">
+      <input message="tns:UpdateOrderStatusRequest"/>
+      <output message="tns:UpdateOrderStatusResponse"/>
+      <fault name="ValidationFault" message="tns:ValidationFault"/>
+      <fault name="UnauthorizedFault" message="tns:UnauthorizedFault"/>
+      <fault name="NotFoundFault" message="tns:NotFoundFault"/>
+      <fault name="ServiceFault" message="tns:ServiceFault"/>
+    </operation>
+  </portType>
+
+  <!-- Bindings (document/literal wrapped) -->
+  <binding name="UsersBinding" type="tns:UsersPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="CreateUser">
+      <soap:operation soapAction="http://ebay.clone.soap/service/CreateUser"/>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
+      <fault name="ValidationFault"><soap:fault name="ValidationFault" use="literal"/></fault>
+      <fault name="ConflictFault"><soap:fault name="ConflictFault" use="literal"/></fault>
+      <fault name="ServiceFault"><soap:fault name="ServiceFault" use="literal"/></fault>
+    </operation>
+    <operation name="GetUser">
+      <soap:operation soapAction="http://ebay.clone.soap/service/GetUser"/>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
+      <fault name="NotFoundFault"><soap:fault name="NotFoundFault" use="literal"/></fault>
+      <fault name="ServiceFault"><soap:fault name="ServiceFault" use="literal"/></fault>
+    </operation>
+    <operation name="ReplaceUser">
+      <soap:operation soapAction="http://ebay.clone.soap/service/ReplaceUser"/>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
+      <fault name="ValidationFault"><soap:fault name="ValidationFault" use="literal"/></fault>
+      <fault name="UnauthorizedFault"><soap:fault name="UnauthorizedFault" use="literal"/></fault>
+      <fault name="NotFoundFault"><soap:fault name="NotFoundFault" use="literal"/></fault>
+      <fault name="ServiceFault"><soap:fault name="ServiceFault" use="literal"/></fault>
+    </operation>
+    <operation name="UpdateUser">
+      <soap:operation soapAction="http://ebay.clone.soap/service/UpdateUser"/>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
+      <fault name="ValidationFault"><soap:fault name="ValidationFault" use="literal"/></fault>
+      <fault name="UnauthorizedFault"><soap:fault name="UnauthorizedFault" use="literal"/></fault>
+      <fault name="NotFoundFault"><soap:fault name="NotFoundFault" use="literal"/></fault>
+      <fault name="ServiceFault"><soap:fault name="ServiceFault" use="literal"/></fault>
+    </operation>
+    <operation name="DeleteUser">
+      <soap:operation soapAction="http://ebay.clone.soap/service/DeleteUser"/>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
+      <fault name="UnauthorizedFault"><soap:fault name="UnauthorizedFault" use="literal"/></fault>
+      <fault name="NotFoundFault"><soap:fault name="NotFoundFault" use="literal"/></fault>
+      <fault name="ServiceFault"><soap:fault name="ServiceFault" use="literal"/></fault>
+    </operation>
+  </binding>
+
+  <binding name="SessionsBinding" type="tns:SessionsPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="Login">
+      <soap:operation soapAction="http://ebay.clone.soap/service/Login"/>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
+      <fault name="ValidationFault"><soap:fault name="ValidationFault" use="literal"/></fault>
+      <fault name="ServiceFault"><soap:fault name="ServiceFault" use="literal"/></fault>
+    </operation>
+    <operation name="Logout">
+      <soap:operation soapAction="http://ebay.clone.soap/service/Logout"/>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
+      <fault name="UnauthorizedFault"><soap:fault name="UnauthorizedFault" use="literal"/></fault>
+      <fault name="ServiceFault"><soap:fault name="ServiceFault" use="literal"/></fault>
+    </operation>
+  </binding>
+
+  <binding name="ListingsBinding" type="tns:ListingsPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="SearchListings">
+      <soap:operation soapAction="http://ebay.clone.soap/service/SearchListings"/>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
+      <fault name="ServiceFault"><soap:fault name="ServiceFault" use="literal"/></fault>
+    </operation>
+    <operation name="CreateListing">
+      <soap:operation soapAction="http://ebay.clone.soap/service/CreateListing"/>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
+      <fault name="ValidationFault"><soap:fault name="ValidationFault" use="literal"/></fault>
+      <fault name="UnauthorizedFault"><soap:fault name="UnauthorizedFault" use="literal"/></fault>
+      <fault name="ServiceFault"><soap:fault name="ServiceFault" use="literal"/></fault>
+    </operation>
+    <operation name="GetListing">
+      <soap:operation soapAction="http://ebay.clone.soap/service/GetListing"/>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
+      <fault name="NotFoundFault"><soap:fault name="NotFoundFault" use="literal"/></fault>
+      <fault name="ServiceFault"><soap:fault name="ServiceFault" use="literal"/></fault>
+    </operation>
+    <operation name="UpdateListing">
+      <soap:operation soapAction="http://ebay.clone.soap/service/UpdateListing"/>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
+      <fault name="ValidationFault"><soap:fault name="ValidationFault" use="literal"/></fault>
+      <fault name="NotFoundFault"><soap:fault name="NotFoundFault" use="literal"/></fault>
+      <fault name="ServiceFault"><soap:fault name="ServiceFault" use="literal"/></fault>
+    </operation>
+    <operation name="DeleteListing">
+      <soap:operation soapAction="http://ebay.clone.soap/service/DeleteListing"/>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
+      <fault name="NotFoundFault"><soap:fault name="NotFoundFault" use="literal"/></fault>
+      <fault name="ServiceFault"><soap:fault name="ServiceFault" use="literal"/></fault>
+    </operation>
+  </binding>
+
+  <binding name="OrdersBinding" type="tns:OrdersPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="ListOrders">
+      <soap:operation soapAction="http://ebay.clone.soap/service/ListOrders"/>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
+      <fault name="UnauthorizedFault"><soap:fault name="UnauthorizedFault" use="literal"/></fault>
+      <fault name="ServiceFault"><soap:fault name="ServiceFault" use="literal"/></fault>
+    </operation>
+    <operation name="CreateOrder">
+      <soap:operation soapAction="http://ebay.clone.soap/service/CreateOrder"/>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
+      <fault name="ValidationFault"><soap:fault name="ValidationFault" use="literal"/></fault>
+      <fault name="UnauthorizedFault"><soap:fault name="UnauthorizedFault" use="literal"/></fault>
+      <fault name="ServiceFault"><soap:fault name="ServiceFault" use="literal"/></fault>
+    </operation>
+    <operation name="GetOrder">
+      <soap:operation soapAction="http://ebay.clone.soap/service/GetOrder"/>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
+      <fault name="UnauthorizedFault"><soap:fault name="UnauthorizedFault" use="literal"/></fault>
+      <fault name="NotFoundFault"><soap:fault name="NotFoundFault" use="literal"/></fault>
+      <fault name="ServiceFault"><soap:fault name="ServiceFault" use="literal"/></fault>
+    </operation>
+    <operation name="UpdateOrder">
+      <soap:operation soapAction="http://ebay.clone.soap/service/UpdateOrder"/>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
+      <fault name="ValidationFault"><soap:fault name="ValidationFault" use="literal"/></fault>
+      <fault name="UnauthorizedFault"><soap:fault name="UnauthorizedFault" use="literal"/></fault>
+      <fault name="NotFoundFault"><soap:fault name="NotFoundFault" use="literal"/></fault>
+      <fault name="ServiceFault"><soap:fault name="ServiceFault" use="literal"/></fault>
+    </operation>
+    <operation name="DeleteOrder">
+      <soap:operation soapAction="http://ebay.clone.soap/service/DeleteOrder"/>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
+      <fault name="UnauthorizedFault"><soap:fault name="UnauthorizedFault" use="literal"/></fault>
+      <fault name="NotFoundFault"><soap:fault name="NotFoundFault" use="literal"/></fault>
+      <fault name="ServiceFault"><soap:fault name="ServiceFault" use="literal"/></fault>
+    </operation>
+    <operation name="CancelOrder">
+      <soap:operation soapAction="http://ebay.clone.soap/service/CancelOrder"/>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
+      <fault name="UnauthorizedFault"><soap:fault name="UnauthorizedFault" use="literal"/></fault>
+      <fault name="NotFoundFault"><soap:fault name="NotFoundFault" use="literal"/></fault>
+      <fault name="ServiceFault"><soap:fault name="ServiceFault" use="literal"/></fault>
+    </operation>
+    <operation name="UpdateOrderStatus">
+      <soap:operation soapAction="http://ebay.clone.soap/service/UpdateOrderStatus"/>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
+      <fault name="ValidationFault"><soap:fault name="ValidationFault" use="literal"/></fault>
+      <fault name="UnauthorizedFault"><soap:fault name="UnauthorizedFault" use="literal"/></fault>
+      <fault name="NotFoundFault"><soap:fault name="NotFoundFault" use="literal"/></fault>
+      <fault name="ServiceFault"><soap:fault name="ServiceFault" use="literal"/></fault>
+    </operation>
+  </binding>
+
+  <!-- Service & Ports -->
+  <service name="EbayCloneService">
+    <port name="UsersPort" binding="tns:UsersBinding">
+      <soap:address location="http://localhost:8080/soap/users"/>
+    </port>
+    <port name="SessionsPort" binding="tns:SessionsBinding">
+      <soap:address location="http://localhost:8080/soap/sessions"/>
+    </port>
+    <port name="ListingsPort" binding="tns:ListingsBinding">
+      <soap:address location="http://localhost:8080/soap/listings"/>
+    </port>
+    <port name="OrdersPort" binding="tns:OrdersBinding">
+      <soap:address location="http://localhost:8080/soap/orders"/>
+    </port>
+  </service>
+</definitions>
+

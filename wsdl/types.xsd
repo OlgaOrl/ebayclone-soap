@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://ebay.clone.soap/types"
+            xmlns:tns="http://ebay.clone.soap/types"
+            elementFormDefault="qualified"
+            attributeFormDefault="unqualified">
+
+  <!-- ===== Common/simple types ===== -->
+  <xsd:simpleType name="OrderStatus">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="pending"/>
+      <xsd:enumeration value="confirmed"/>
+      <xsd:enumeration value="shipped"/>
+      <xsd:enumeration value="delivered"/>
+      <xsd:enumeration value="cancelled"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="OrderUpdatableStatus">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="pending"/>
+      <xsd:enumeration value="confirmed"/>
+      <xsd:enumeration value="shipped"/>
+      <xsd:enumeration value="delivered"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="ListingCondition">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="new"/>
+      <xsd:enumeration value="like-new"/>
+      <xsd:enumeration value="good"/>
+      <xsd:enumeration value="fair"/>
+      <xsd:enumeration value="poor"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <!-- ===== Domain types ===== -->
+  <xsd:complexType name="User">
+    <xsd:sequence>
+      <xsd:element name="id" type="xsd:long"/>
+      <xsd:element name="username" type="xsd:string"/>
+      <xsd:element name="email" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="UserCreate">
+    <xsd:sequence>
+      <xsd:element name="username" type="xsd:string"/>
+      <xsd:element name="email" type="xsd:string"/>
+      <xsd:element name="password" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="UserLogin">
+    <xsd:sequence>
+      <xsd:element name="email" type="xsd:string"/>
+      <xsd:element name="password" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="UserUpdate">
+    <xsd:sequence>
+      <xsd:element name="username" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="email" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="password" type="xsd:string" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="Listing">
+    <xsd:sequence>
+      <xsd:element name="id" type="xsd:long"/>
+      <xsd:element name="title" type="xsd:string"/>
+      <xsd:element name="description" type="xsd:string"/>
+      <xsd:element name="price" type="xsd:decimal"/>
+      <!-- Optional fields present in create/update -->
+      <xsd:element name="category" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="condition" type="tns:ListingCondition" minOccurs="0"/>
+      <xsd:element name="location" type="xsd:string" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="ListingCreate">
+    <xsd:sequence>
+      <xsd:element name="title" type="xsd:string"/>
+      <xsd:element name="description" type="xsd:string"/>
+      <xsd:element name="price" type="xsd:decimal"/>
+      <xsd:element name="category" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="condition" type="tns:ListingCondition" minOccurs="0"/>
+      <xsd:element name="location" type="xsd:string" minOccurs="0"/>
+      <!-- images omitted for SOAP (binary attachments optional) -->
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="ListingUpdate">
+    <xsd:sequence>
+      <xsd:element name="title" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="description" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="price" type="xsd:decimal" minOccurs="0"/>
+      <xsd:element name="category" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="condition" type="tns:ListingCondition" minOccurs="0"/>
+      <xsd:element name="location" type="xsd:string" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="Address">
+    <xsd:sequence>
+      <xsd:element name="street" type="xsd:string"/>
+      <xsd:element name="city" type="xsd:string"/>
+      <xsd:element name="state" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="zipCode" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="country" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="Order">
+    <xsd:sequence>
+      <xsd:element name="id" type="xsd:long"/>
+      <xsd:element name="userId" type="xsd:long"/>
+      <xsd:element name="listingId" type="xsd:long"/>
+      <xsd:element name="quantity" type="xsd:int"/>
+      <xsd:element name="totalPrice" type="xsd:decimal"/>
+      <xsd:element name="status" type="tns:OrderStatus"/>
+      <xsd:element name="shippingAddress" type="tns:Address"/>
+      <xsd:element name="buyerNotes" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="createdAt" type="xsd:dateTime"/>
+      <xsd:element name="updatedAt" type="xsd:dateTime"/>
+      <xsd:element name="cancelledAt" type="xsd:dateTime" minOccurs="0"/>
+      <xsd:element name="cancelReason" type="xsd:string" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="OrderCreate">
+    <xsd:sequence>
+      <xsd:element name="listingId" type="xsd:long"/>
+      <xsd:element name="quantity" type="xsd:int"/>
+      <xsd:element name="shippingAddress" type="tns:Address"/>
+      <xsd:element name="buyerNotes" type="xsd:string" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="OrderUpdate">
+    <xsd:sequence>
+      <xsd:element name="userId" type="xsd:long" minOccurs="0"/>
+      <xsd:element name="listingId" type="xsd:long" minOccurs="0"/>
+      <xsd:element name="quantity" type="xsd:int" minOccurs="0"/>
+      <xsd:element name="totalPrice" type="xsd:decimal" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="Pagination">
+    <xsd:sequence>
+      <xsd:element name="total" type="xsd:int"/>
+      <xsd:element name="pages" type="xsd:int"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="OrdersPage">
+    <xsd:sequence>
+      <xsd:element name="orders" type="tns:Order" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="pagination" type="tns:Pagination"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <!-- ===== Request/Response wrapper types ===== -->
+  <!-- Users -->
+  <xsd:element name="CreateUserRequest">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="user" type="tns:UserCreate"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="CreateUserResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="user" type="tns:User"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="GetUserRequest">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="id" type="xsd:long"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="GetUserResponse" type="tns:CreateUserResponse"/>
+
+  <xsd:element name="ReplaceUserRequest">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="id" type="xsd:long"/>
+        <xsd:element name="user" type="tns:UserUpdate"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="ReplaceUserResponse" type="tns:CreateUserResponse"/>
+
+  <xsd:element name="UpdateUserRequest" type="tns:ReplaceUserRequest"/>
+  <xsd:element name="UpdateUserResponse" type="tns:CreateUserResponse"/>
+
+  <xsd:element name="DeleteUserRequest" type="tns:GetUserRequest"/>
+  <xsd:element name="DeleteUserResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="message" type="xsd:string" minOccurs="0"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <!-- Sessions -->
+  <xsd:element name="LoginRequest">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="credentials" type="tns:UserLogin"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="LoginResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="token" type="xsd:string"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="LogoutRequest" type="xsd:anyType"/>
+  <xsd:element name="LogoutResponse" type="tns:DeleteUserResponse"/>
+
+  <!-- Listings -->
+  <xsd:element name="SearchListingsRequest">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="search" type="xsd:string" minOccurs="0"/>
+        <xsd:element name="priceMin" type="xsd:decimal" minOccurs="0"/>
+        <xsd:element name="priceMax" type="xsd:decimal" minOccurs="0"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="SearchListingsResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="listing" type="tns:Listing" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="CreateListingRequest">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="listing" type="tns:ListingCreate"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="CreateListingResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="listing" type="tns:Listing"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="GetListingRequest" type="tns:GetUserRequest"/>
+  <xsd:element name="GetListingResponse" type="tns:CreateListingResponse"/>
+
+  <xsd:element name="UpdateListingRequest">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="id" type="xsd:long"/>
+        <xsd:element name="listing" type="tns:ListingUpdate"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="UpdateListingResponse" type="tns:CreateListingResponse"/>
+
+  <xsd:element name="DeleteListingRequest" type="tns:GetUserRequest"/>
+  <xsd:element name="DeleteListingResponse" type="tns:DeleteUserResponse"/>
+
+  <!-- Orders -->
+  <xsd:element name="ListOrdersRequest">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="userId" type="xsd:long" minOccurs="0"/>
+        <xsd:element name="status" type="tns:OrderStatus" minOccurs="0"/>
+        <xsd:element name="page" type="xsd:int" minOccurs="0"/>
+        <xsd:element name="limit" type="xsd:int" minOccurs="0"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="ListOrdersResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="result" type="tns:OrdersPage"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="CreateOrderRequest">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="order" type="tns:OrderCreate"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="CreateOrderResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="order" type="tns:Order"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="GetOrderRequest" type="tns:GetUserRequest"/>
+  <xsd:element name="GetOrderResponse" type="tns:CreateOrderResponse"/>
+
+  <xsd:element name="UpdateOrderRequest">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="id" type="xsd:long"/>
+        <xsd:element name="order" type="tns:OrderUpdate"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="UpdateOrderResponse" type="tns:CreateOrderResponse"/>
+
+  <xsd:element name="DeleteOrderRequest" type="tns:GetUserRequest"/>
+  <xsd:element name="DeleteOrderResponse" type="tns:DeleteUserResponse"/>
+
+  <xsd:complexType name="CancelledOrderSnapshot">
+    <xsd:sequence>
+      <xsd:element name="id" type="xsd:long"/>
+      <xsd:element name="status" type="tns:OrderStatus"/>
+      <xsd:element name="cancelledAt" type="xsd:dateTime"/>
+      <xsd:element name="cancelReason" type="xsd:string" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:element name="CancelOrderRequest">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="id" type="xsd:long"/>
+        <xsd:element name="cancelReason" type="xsd:string" minOccurs="0"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="CancelOrderResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="message" type="xsd:string"/>
+        <xsd:element name="order" type="tns:CancelledOrderSnapshot"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="UpdateOrderStatusRequest">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="id" type="xsd:long"/>
+        <xsd:element name="status" type="tns:OrderUpdatableStatus"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="UpdateOrderStatusResponse" type="tns:CreateOrderResponse"/>
+
+</xsd:schema>
+

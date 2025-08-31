@@ -20,9 +20,9 @@ import java.util.stream.Collectors;
 )
 public class ProductServiceImpl implements ProductService {
     
-    // In-memory storage for demo purposes
-    private static final ConcurrentHashMap<Long, Product> products = new ConcurrentHashMap<>();
-    private static long nextId = 1;
+    // In-memory storage for demo purposes (instance-scoped for test isolation)
+    private final ConcurrentHashMap<Long, Product> products = new ConcurrentHashMap<>();
+    private long nextId = 1;
     
     @Override
     public Product createProduct(Product product) throws ServiceFault {

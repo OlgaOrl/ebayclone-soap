@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://ebay.clone.soap/faults"
+            xmlns:tns="http://ebay.clone.soap/faults"
+            elementFormDefault="qualified"
+            attributeFormDefault="unqualified">
+
+  <xsd:complexType name="ErrorDetail">
+    <xsd:sequence>
+      <xsd:element name="code" type="xsd:string"/>
+      <xsd:element name="message" type="xsd:string"/>
+      <xsd:element name="details" type="xsd:string" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:element name="ValidationFaultDetail" type="tns:ErrorDetail"/>
+  <xsd:element name="UnauthorizedFaultDetail" type="tns:ErrorDetail"/>
+  <xsd:element name="NotFoundFaultDetail" type="tns:ErrorDetail"/>
+  <xsd:element name="ConflictFaultDetail" type="tns:ErrorDetail"/>
+  <xsd:element name="BusinessRuleFaultDetail" type="tns:ErrorDetail"/>
+  <xsd:element name="ServiceFaultDetail" type="tns:ErrorDetail"/>
+
+</xsd:schema>
+
