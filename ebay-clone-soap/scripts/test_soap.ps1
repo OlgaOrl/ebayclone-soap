@@ -13,6 +13,7 @@ $UserUrl = "$BaseUrl/soap/user"
 $ProductUrl = "$BaseUrl/soap/product"
 $AuctionUrl = "$BaseUrl/soap/auction"
 $OrderUrl = "$BaseUrl/soap/order"
+$AuthToken = if ($env:AUTH_TOKEN) { $env:AUTH_TOKEN } else { 'test-token' }
 
 function Pass([string]$msg) { Write-Host "[PASS] $msg" -ForegroundColor Green }
 function Fail([string]$msg) { Write-Host "[FAIL] $msg" -ForegroundColor Red; exit 1 }
@@ -47,10 +48,10 @@ function Post-Xml($url, [string]$xml) {
 
 # 1) WSDL availability
 $wsdls = @(
-  @{ Name = 'UserService'; Url = "$UserUrl?wsdl" },
-  @{ Name = 'ProductService'; Url = "$ProductUrl?wsdl" },
-  @{ Name = 'AuctionService'; Url = "$AuctionUrl?wsdl" },
-  @{ Name = 'OrderService'; Url = "$OrderUrl?wsdl" }
+  @{ Name = 'UserService'; Url = "${UserUrl}?wsdl" },
+  @{ Name = 'ProductService'; Url = "${ProductUrl}?wsdl" },
+  @{ Name = 'AuctionService'; Url = "${AuctionUrl}?wsdl" },
+  @{ Name = 'OrderService'; Url = "${OrderUrl}?wsdl" }
 )
 foreach ($w in $wsdls) {
   $r = Get-Http $w.Url
@@ -112,6 +113,7 @@ if (($r.Body -notmatch '<response') -and ($r.Body -notmatch '<soapenv:Body')) { 
 Pass 'ProductService.searchProducts basic call'
 
 Write-Host 'All checks passed.' -ForegroundColor Green
+
 
 
 

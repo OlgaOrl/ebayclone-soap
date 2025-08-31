@@ -83,6 +83,20 @@ pass "UserService.registerUser SUCCESS"
 
 # 3) ProductService.getProduct negative test (expect SOAP Fault for unknown id)
 PROD_REQ=$(mktemp)
+if [[ -n "${AUTH_TOKEN:-}" ]]; then
+cat > "$PROD_REQ" <<XML
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:srv="http://ebay.clone.soap/service" xmlns:auth="http://ebay.clone.soap/auth">
+  <soapenv:Header>
+    <auth:AuthToken>${AUTH_TOKEN}</auth:AuthToken>
+  </soapenv:Header>
+  <soapenv:Body>
+    <srv:getProduct>
+      <productId>999999</productId>
+    </srv:getProduct>
+  </soapenv:Body>
+</soapenv:Envelope>
+XML
+else
 cat > "$PROD_REQ" <<'XML'
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:srv="http://ebay.clone.soap/service">
   <soapenv:Header/>
@@ -93,6 +107,7 @@ cat > "$PROD_REQ" <<'XML'
   </soapenv:Body>
 </soapenv:Envelope>
 XML
+fi
 PROD_RESP=$(mktemp)
 code=$(curl_post_xml "$PRODUCT_URL" "$PROD_REQ" "$PROD_RESP")
 # CXF typically returns 500 for SOAP 1.1 Faults; tolerate 200 with Fault too

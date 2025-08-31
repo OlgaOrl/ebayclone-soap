@@ -17,40 +17,45 @@ public class AuthenticationHandler implements SOAPHandler<SOAPMessageContext> {
     @Override
     public boolean handleMessage(SOAPMessageContext context) {
         Boolean outbound = (Boolean) context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
-        
+
         if (!outbound) { // Inbound message
             try {
+                // Allow unauthenticated access for registration
+                QName operation = (QName) context.get(MessageContext.WSDL_OPERATION);
+                if (operation != null && "registerUser".equals(operation.getLocalPart())) {
+                    return true;
+                }
+
                 SOAPEnvelope envelope = context.getMessage().getSOAPPart().getEnvelope();
                 SOAPHeader header = envelope.getHeader();
-                
+
                 if (header == null) {
                     throw new RuntimeException("Authentication header is missing");
                 }
-                
-                // Get authentication token
-                SOAPElement authElement = (SOAPElement) header.getChildElements(
-                        new QName(AUTH_NS, "AuthToken")).next();
-                
-                if (authElement == null) {
+
+                // Get authentication token safely
+                java.util.Iterator<?> it = header.getChildElements(new QName(AUTH_NS, "AuthToken"));
+                if (it == null || !it.hasNext()) {
                     throw new RuntimeException("Authentication token is missing");
                 }
-                
+                SOAPElement authElement = (SOAPElement) it.next();
+
                 String token = authElement.getValue();
-                
+
                 // Validate token (in a real implementation, this would check against a database or auth service)
                 if (token == null || token.isEmpty() || !isValidToken(token)) {
                     throw new RuntimeException("Invalid authentication token");
                 }
-                
+
                 // Store user info in context for service implementations to use
                 context.put("USER_ID", getUserIdFromToken(token));
                 context.setScope("USER_ID", MessageContext.Scope.APPLICATION);
-                
+
             } catch (Exception e) {
                 throw new RuntimeException("Authentication failed: " + e.getMessage(), e);
             }
         }
-        
+
         return true;
     }
     
