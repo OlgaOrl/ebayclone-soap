@@ -69,9 +69,9 @@ cat > "$USER_REQ" <<'XML'
   <soapenv:Header/>
   <soapenv:Body>
     <typ:request>
-      <username>alice_$(date +%Y%m%d%H%M%S)</username>
-      <email>alice_$(date +%s)@example.com</email>
-      <password>secret12</password>
+      <typ:username>alice_$(date +%Y%m%d%H%M%S)</typ:username>
+      <typ:email>alice_$(date +%s)@example.com</typ:email>
+      <typ:password>secret12</typ:password>
     </typ:request>
   </soapenv:Body>
 </soapenv:Envelope>
