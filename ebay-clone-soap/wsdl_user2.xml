@@ -1,0 +1,78 @@
+﻿<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://ebay.clone.soap/service" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns2="http://schemas.xmlsoap.org/soap/http" xmlns:ns1="http://ebay.clone.soap/types" name="UserService" targetNamespace="http://ebay.clone.soap/service">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ebay.clone.soap/types" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://ebay.clone.soap/types" version="1.0">
+  <xs:complexType name="RegisterUserRequest">
+    <xs:sequence>
+      <xs:element name="username" type="xs:string"/>
+      <xs:element name="email" type="xs:string"/>
+      <xs:element name="password" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RegisterUserResponse">
+    <xs:sequence>
+      <xs:element name="user" type="tns:User"/>
+      <xs:element name="status" type="xs:string"/>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="User">
+    <xs:sequence>
+      <xs:element name="id" type="xs:long"/>
+      <xs:element name="username" type="xs:string"/>
+      <xs:element name="email" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ServiceFault" type="tns:ServiceFault"/>
+  <xs:complexType name="ServiceFault">
+    <xs:sequence>
+      <xs:element name="##default" type="xs:string"/>
+      <xs:element name="##default" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="request" nillable="true" type="tns:RegisterUserRequest"/>
+  <xs:element name="response" nillable="true" type="tns:RegisterUserResponse"/>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="ServiceFault">
+    <wsdl:part element="ns1:ServiceFault" name="ServiceFault">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="registerUserResponse">
+    <wsdl:part element="ns1:response" name="response">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="registerUser">
+    <wsdl:part element="ns1:request" name="request">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="UserService">
+    <wsdl:operation name="registerUser">
+      <wsdl:input message="tns:registerUser" name="registerUser">
+    </wsdl:input>
+      <wsdl:output message="tns:registerUserResponse" name="registerUserResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:ServiceFault" name="ServiceFault">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="UserServiceSoapBinding" type="tns:UserService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="registerUser">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="registerUser">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="registerUserResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ServiceFault">
+        <soap:fault name="ServiceFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="UserService">
+    <wsdl:port binding="tns:UserServiceSoapBinding" name="UserServicePort">
+      <soap:address location="http://localhost:8080/soap/user"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

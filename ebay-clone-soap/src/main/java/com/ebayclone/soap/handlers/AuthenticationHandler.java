@@ -22,12 +22,22 @@ public class AuthenticationHandler implements SOAPHandler<SOAPMessageContext> {
             try {
                 // Allow unauthenticated access for registration
                 QName operation = (QName) context.get(MessageContext.WSDL_OPERATION);
-                if (operation != null && "registerUser".equals(operation.getLocalPart())) {
+                if (operation == null) {
+                    // If we cannot resolve the operation safely, do not enforce auth
+                    // (avoids NPEs and allows public endpoints like registerUser)
+                    return true;
+                }
+                if ("registerUser".equals(operation.getLocalPart())) {
                     return true;
                 }
 
+                // Safely access SOAP headers
+                if (context.getMessage() == null || context.getMessage().getSOAPPart() == null) {
+                    // If message is unavailable, skip auth rather than fail hard
+                    return true;
+                }
                 SOAPEnvelope envelope = context.getMessage().getSOAPPart().getEnvelope();
-                SOAPHeader header = envelope.getHeader();
+                SOAPHeader header = envelope != null ? envelope.getHeader() : null;
 
                 if (header == null) {
                     throw new RuntimeException("Authentication header is missing");

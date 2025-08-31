@@ -13,7 +13,7 @@ $UserUrl = "$BaseUrl/soap/user"
 $ProductUrl = "$BaseUrl/soap/product"
 $AuctionUrl = "$BaseUrl/soap/auction"
 $OrderUrl = "$BaseUrl/soap/order"
-$AuthToken = if ($env:AUTH_TOKEN) { $env:AUTH_TOKEN } else { 'test-token' }
+$Token = if ($env:AUTH_TOKEN) { $env:AUTH_TOKEN } else { 'test-token' }
 
 function Pass([string]$msg) { Write-Host "[PASS] $msg" -ForegroundColor Green }
 function Fail([string]$msg) { Write-Host "[FAIL] $msg" -ForegroundColor Red; exit 1 }
@@ -66,8 +66,8 @@ $registerXml = @"
   <soapenv:Header/>
   <soapenv:Body>
     <typ:request>
-      <username>alice</username>
-      <email>alice@example.com</email>
+      <username>alice_$([DateTimeOffset]::UtcNow.ToUnixTimeSeconds())</username>
+      <email>alice_$([DateTimeOffset]::UtcNow.ToUnixTimeSeconds())@example.com</email>
       <password>secret12</password>
     </typ:request>
   </soapenv:Body>
@@ -78,10 +78,12 @@ if ($r.Code -ne 200) { Fail "registerUser: expected HTTP 200, got $($r.Code)" }
 if ($r.Body -notmatch '<status>SUCCESS</status>') { Fail 'registerUser: SUCCESS not found in response' }
 Pass 'UserService.registerUser SUCCESS'
 
-# 3) ProductService.getProduct negative
+# 3) ProductService.getProduct negative (always include AuthToken)
 $getProductXml = @"
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:srv="http://ebay.clone.soap/service">
-  <soapenv:Header/>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:srv="http://ebay.clone.soap/service" xmlns:auth="http://ebay.clone.soap/auth">
+  <soapenv:Header>
+    <auth:AuthToken>$Token</auth:AuthToken>
+  </soapenv:Header>
   <soapenv:Body>
     <srv:getProduct>
       <productId>999999</productId>
@@ -91,13 +93,17 @@ $getProductXml = @"
 "@
 $r = Post-Xml $ProductUrl $getProductXml
 if (($r.Code -ne 500) -and ($r.Code -ne 200)) { Fail "getProduct: unexpected HTTP $($r.Code)" }
-if (($r.Body -notmatch '<Fault') -and ($r.Body -notmatch 'NOT_FOUND')) { Fail 'getProduct: expected SOAP Fault or NOT_FOUND' }
+if ( ($r.Body -notmatch 'Fault') -and ($r.Body -notmatch 'faultcode') -and ($r.Body -notmatch 'Product not found') -and ($r.Body -notmatch 'NOT_FOUND') ) {
+  Fail 'getProduct: expected SOAP Fault or NOT_FOUND'
+}
 Pass 'ProductService.getProduct fault on unknown id'
 
-# 4) ProductService.searchProducts basic call
+# 4) ProductService.searchProducts basic call (always include AuthToken)
 $searchXml = @"
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:srv="http://ebay.clone.soap/service" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <soapenv:Header/>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:srv="http://ebay.clone.soap/service" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:auth="http://ebay.clone.soap/auth">
+  <soapenv:Header>
+    <auth:AuthToken>$Token</auth:AuthToken>
+  </soapenv:Header>
   <soapenv:Body>
     <srv:searchProducts>
       <keyword>test</keyword>

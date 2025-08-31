@@ -12,6 +12,7 @@ set -euo pipefail
 #   BASE_URL=http://127.0.0.1:8080 ./scripts/test_soap.sh
 
 BASE_URL=${BASE_URL:-http://localhost:8080}
+AUTH_TOKEN=${AUTH_TOKEN:-test-token}
 USER_URL="$BASE_URL/soap/user"
 PRODUCT_URL="$BASE_URL/soap/product"
 AUCTION_URL="$BASE_URL/soap/auction"
@@ -68,8 +69,8 @@ cat > "$USER_REQ" <<'XML'
   <soapenv:Header/>
   <soapenv:Body>
     <typ:request>
-      <username>alice</username>
-      <email>alice@example.com</email>
+      <username>alice_$(date +%Y%m%d%H%M%S)</username>
+      <email>alice_$(date +%s)@example.com</email>
       <password>secret12</password>
     </typ:request>
   </soapenv:Body>
@@ -119,6 +120,22 @@ pass "ProductService.getProduct fault on unknown id"
 
 # 4) ProductService.searchProducts simple call (wrapped, with nullable params)
 SEARCH_REQ=$(mktemp)
+if [[ -n "${AUTH_TOKEN:-}" ]]; then
+cat > "$SEARCH_REQ" <<XML
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:srv="http://ebay.clone.soap/service" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:auth="http://ebay.clone.soap/auth">
+  <soapenv:Header>
+    <auth:AuthToken>${AUTH_TOKEN}</auth:AuthToken>
+  </soapenv:Header>
+  <soapenv:Body>
+    <srv:searchProducts>
+      <keyword>test</keyword>
+      <category xsi:nil="true"/>
+      <maxPrice xsi:nil="true"/>
+    </srv:searchProducts>
+  </soapenv:Body>
+</soapenv:Envelope>
+XML
+else
 cat > "$SEARCH_REQ" <<'XML'
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:srv="http://ebay.clone.soap/service" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <soapenv:Header/>
@@ -131,6 +148,7 @@ cat > "$SEARCH_REQ" <<'XML'
   </soapenv:Body>
 </soapenv:Envelope>
 XML
+fi
 SEARCH_RESP=$(mktemp)
 code=$(curl_post_xml "$PRODUCT_URL" "$SEARCH_REQ" "$SEARCH_RESP")
 [[ "$code" == "200" ]] || fail "searchProducts: expected HTTP 200, got $code"
